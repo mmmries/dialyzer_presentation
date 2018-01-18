@@ -30,6 +30,7 @@ Run `mix do deps.get, dialyzer`
 Switch `Sqlitex.open/1` arguments
 
 > `Function with_db/2 has no local return` this is a common error and what it really means is that there was a problem resolving the types somewhere down-stream from here.
+
 > `esqlite3:open({'path',_}) will never return since the success typing is (string()) -> {'error',_} | {'ok',{'connection',reference(),_}} and the contract is (FileName) -> {'ok',connection()} | {'error',_} when FileName :: string()`
 
 The best way to look at this is to read it as "you tried to call it like this, but you need to call it like this".
@@ -48,6 +49,7 @@ If we look up to where it gets called in a `handle_call` the reason it doesn't k
 Add a `when is_binary(sql)`
 
 > `lib/sqlitex/server.ex:176: Function prepare_impl/2 has no local return`
+
 > `lib/sqlitex/server.ex:176: Guard test is_integer(sql@1::binary()) can never succeed`
 
 Now it can tell us that there is a type mismatch because it knows that `sql` is a `binary()` and then it knows we expect an `integer()`.
